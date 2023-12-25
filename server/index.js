@@ -8,9 +8,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { connectDB } from './db/connect.db.js';
 import { register } from './controllers/auth.controllers.js';
+import { createPost } from './controllers/posts.controllers.js';
 import authRoutes from './routes/auth.route.js';
 import userRoutes from './routes/user.route.js';
 import postRoutes from './routes/posts.route.js';
+import { verifyToken } from './middleware/auth.middleware.js';
 
 
 
@@ -41,6 +43,7 @@ const upload = multer({ storage });
 
 // routes with files
 app.post('/auth/register', upload.single('picture'), register);
+app.post('/posts', verifyToken, upload.single('picture'), createPost);
 
 // routes
 app.use('/auth', authRoutes);
